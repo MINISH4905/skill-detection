@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submit Project - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">Submit Project</h1>
+{% endblock %}
+
+{% block content %}
+<div class="submit-project-page">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title *</label>
+                    <input type="text" name="title" id="title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="domain_name">Domain *</label>
+                    <input type="text" name="domain_name" id="domain_name" class="form-control" required placeholder="e.g. Python" value="{{ initial_domain }}">
+                </div>
+                <div class="form-group">
+                    <label for="repo_url">Repo URL</label>
+                    <input type="url" name="repo_url" id="repo_url" class="form-control" placeholder="https://github.com/...">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Project</button>
+            </form>
+        </div>
+    </div>
+    <p><a href="{% url 'my_projects' %}">View my projects</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Modules - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">My Module Progress</h1>
+{% endblock %}
+
+{% block content %}
+<div class="my-modules-page">
+    <p><a href="{% url 'modules_list' %}">Browse all modules</a></p>
+    <div class="card">
+        <div class="card-body">
+            <ul class="progress-list">
+                {% for p in progress_list %}
+                <li class="progress-item">
+                    <a href="{% url 'module_detail' p.module_id %}">{{ p.module.title }}</a>
+                    <span class="badge">{{ p.get_status_display }}</span>
+                    <span>{{ p.progress_percent }}%</span>
+                </li>
+                {% empty %}
+                <li class="empty-state">No module progress yet. <a href="{% url 'modules_list' %}">Start a module</a>.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Modules - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">Learning Modules</h1>
+{% endblock %}
+
+{% block content %}
+<div class="modules-page">
+    <div class="card">
+        <div class="card-body">
+            <form method="get" class="filter-form">
+                <label for="domain">Filter by domain:</label>
+                <select name="domain" id="domain" onchange="this.form.submit()">
+                    <option value="">All domains</option>
+                    {% for d in domains %}
+                    <option value="{{ d }}" {% if selected_domain == d %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            <p><a href="{% url 'my_modules' %}">View my module progress →</a></p>
+        </div>
+    </div>
+    <div class="modules-grid">
+        {% for module in modules %}
+        <div class="card module-card">
+            <div class="card-body">
+                <h3>{{ module.title }}</h3>
+                <p class="module-meta">{{ module.domain_name }} · {{ module.get_difficulty_level_display }} · {{ module.xp_reward }} XP</p>
+                <p>{{ module.description|truncatewords:20 }}</p>
+                <a href="{% url 'module_detail' module.pk %}" class="btn btn-primary">View & Start</a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-state">No modules available yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

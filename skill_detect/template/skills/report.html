@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Report - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">Report</h1>
+{% endblock %}
+
+{% block content %}
+<div class="report-page">
+    <!-- Skill Decay Indicators -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Skill Decay Analysis</h2>
+        </div>
+        <div class="card-body">
+            {% if days_since_last_response %}
+            <div class="decay-indicator">
+                <div class="indicator-header">
+                    <h3>Activity Status</h3>
+                    {% if days_since_last_response > 3 %}
+                    <span class="indicator-badge warning">⚠️ Inactive</span>
+                    {% else %}
+                    <span class="indicator-badge success">✓ Active</span>
+                    {% endif %}
+                </div>
+                <p>Days since last response: <strong>{{ days_since_last_response }}</strong></p>
+                {% if days_since_last_response > 3 %}
+                <p class="warning-text">⚠️ Extended inactivity detected. Consider answering daily questions to maintain skill health.</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if skill_decay_indicators %}
+            <div class="decay-indicators-list">
+                <h3>Skills Showing Decline</h3>
+                {% for indicator in skill_decay_indicators %}
+                <div class="decay-item">
+                    <div class="decay-skill-name">{{ indicator.skill.name }}</div>
+                    <div class="decay-comparison">
+                        <div class="score-comparison">
+                            <span class="score-label">Recent Average:</span>
+                            <span class="score-value recent">{{ indicator.recent_avg|floatformat:1 }}%</span>
+                        </div>
+                        <div class="score-comparison">
+                            <span class="score-label">Previous Average:</span>
+                            <span class="score-value older">{{ indicator.older_avg|floatformat:1 }}%</span>
+                        </div>
+                        <div class="decline-amount">
+                            Decline: <strong>{{ indicator.decline|floatformat:1 }}%</strong>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>No significant skill decay detected. Keep up the good work! 🎉</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recommendations Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Recommendations</h2>
+        </div>
+        <div class="card-body">
+            <div class="recommendations-list">
+                {% if days_since_last_response and days_since_last_response > 3 %}
+                <div class="recommendation-item">
+                    <h4>📝 Answer Daily Questions</h4>
+                    <p>Regular engagement helps maintain skill health. Try answering today's question!</p>
+                    <a href="{% url 'daily_question' %}" class="btn btn-primary">Go to Question</a>
+                </div>
+                {% endif %}
+                
+                {% if skill_decay_indicators %}
+                <div class="recommendation-item">
+                    <h4>🎯 Focus on Declining Skills</h4>
+                    <p>Consider spending more time on skills showing decline to improve your scores.</p>
+                </div>
+                {% endif %}
+                
+                {% if not days_since_last_response or days_since_last_response <= 3 %}
+                    {% if not skill_decay_indicators %}
+                    <div class="recommendation-item">
+                        <h4>✨ Great Job!</h4>
+                        <p>Your skills are in good shape. Keep maintaining regular engagement!</p>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

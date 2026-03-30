@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Projects - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">My Projects</h1>
+{% endblock %}
+
+{% block content %}
+<div class="my-projects-page">
+    <p><a href="{% url 'submit_project' %}" class="btn btn-primary">+ Submit New Project</a></p>
+    <div class="card">
+        <div class="card-body">
+            <ul class="project-list">
+                {% for project in projects %}
+                <li class="project-item">
+                    <strong>{{ project.title }}</strong> ({{ project.domain_name }}) — <span class="status-badge status-{{ project.status }}">{{ project.status }}</span>
+                    <br><small>{{ project.submitted_at|date:"M d, Y H:i" }}</small>
+                    {% if project.evaluation_result %}
+                    <details class="eval-result">
+                        <summary>Evaluation result</summary>
+                        <pre>{{ project.evaluation_result_display }}</pre>
+                    </details>
+                    {% endif %}
+                </li>
+                {% empty %}
+                <li class="empty-state">No projects yet. <a href="{% url 'submit_project' %}">Submit one</a>.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

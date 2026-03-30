@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Certifications - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">My Certifications</h1>
+{% endblock %}
+
+{% block content %}
+<div class="certifications-page">
+    <p><a href="{% url 'add_certification' %}" class="btn btn-primary">+ Add Certification</a></p>
+    <div class="card">
+        <div class="card-body">
+            <ul class="cert-list">
+                {% for c in certifications %}
+                <li class="cert-item">
+                    <strong>{{ c.name }}</strong>
+                    {% if c.issuer %}<span> — {{ c.issuer }}</span>{% endif %}
+                    {% if c.domain_name %}<span class="badge">{{ c.domain_name }}</span>{% endif %}
+                    {% if c.credential_url %}<a href="{{ c.credential_url }}" target="_blank" rel="noopener">Link</a>{% endif %}
+                    <br><small>Added {{ c.created_at|date:"M d, Y" }}</small>
+                </li>
+                {% empty %}
+                <li class="empty-state">No certifications yet. <a href="{% url 'add_certification' %}">Add one</a>.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

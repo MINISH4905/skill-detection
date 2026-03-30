@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EDUNET{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #0f172a;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 240px;
+            background: #111827;
+            color: white;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h4 {
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+        }
+
+        .logout-btn button {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #dc2626;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn button:hover {
+            background: #b91c1c;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background: #f4f6f8;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .user-info {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .main-content {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+        <h4>EDUNET</h4>
+
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'modules_list' %}">Modules</a>
+        <a href="{% url 'progress' %}">Progress</a>
+        <a href="{% url 'activity' %}">Activity</a>
+        <a href="{% url 'profile_settings' %}">Profile</a>
+
+        <div class="logout-btn">
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-content">
+
+        <div class="topbar">
+            <h5>{% block page_title %}{% endblock %}</h5>
+            <div class="user-info">
+                Logged in as <strong>{{ request.user.username }}</strong>
+            </div>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</div>
+
+<!-- Global JS -->
+<script src="{% static 'js/app.js' %}"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

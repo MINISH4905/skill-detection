@@ -1,0 +1,83 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div style="width: 400px; margin: 50px auto;">
+    <h2>Create Account</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Username -->
+        <div>
+            <label>Username</label><br>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p style="color:red;">{{ form.username.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <!-- Email -->
+        <div>
+            <label>Email</label><br>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <p style="color:red;">{{ form.email.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <!-- Role -->
+        <div>
+            <label>Role</label><br>
+            {{ form.role }}
+            {% if form.role.errors %}
+                <p style="color:red;">{{ form.role.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <!-- Password -->
+        <div>
+            <label>Password</label><br>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <p style="color:red;">{{ form.password1.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <!-- Confirm Password -->
+        <div>
+            <label>Confirm Password</label><br>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <p style="color:red;">{{ form.password2.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <br>
+
+        {% if form.non_field_errors %}
+            <p style="color:red;">
+                {{ form.non_field_errors }}
+            </p>
+        {% endif %}
+
+        <button type="submit">Register</button>
+    </form>
+
+    <br>
+    <p>
+        Already have an account?
+        <a href="{% url 'login' %}">Login</a>
+    </p>
+</div>
+
+{% endblock %}

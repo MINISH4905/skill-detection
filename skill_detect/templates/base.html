@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EDUNET{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}">
+</head>
+<body>
+
+{% if request.user.is_authenticated %}
+<div class="layout">
+
+    <aside class="sidebar">
+        <h3>EDUNET</h3>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="#">Modules</a>
+        <a href="#">Progress</a>
+        <a href="{% url 'select_domains' %}">Domain</a>
+        <a href="#">Topics</a>
+
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </aside>
+
+    <main class="main-content">
+{% endif %}
+
+{% if not request.user.is_authenticated %}
+<div class="auth-wrapper">
+{% endif %}
+
+        {% block content %}
+        {% endblock %}
+
+{% if not request.user.is_authenticated %}
+</div>
+{% endif %}
+
+{% if request.user.is_authenticated %}
+    </main>
+</div>
+{% endif %}
+
+<script src="{% static 'js/auth.js' %}"></script>
+
+</body>
+</html>

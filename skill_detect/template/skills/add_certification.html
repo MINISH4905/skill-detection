@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Certification - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">Add Certification</h1>
+{% endblock %}
+
+{% block content %}
+<div class="add-certification-page">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" name="name" id="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="issuer">Issuer</label>
+                    <input type="text" name="issuer" id="issuer" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="domain_name">Domain</label>
+                    <input type="text" name="domain_name" id="domain_name" class="form-control" placeholder="e.g. Python">
+                </div>
+                <div class="form-group">
+                    <label for="credential_url">Credential URL</label>
+                    <input type="url" name="credential_url" id="credential_url" class="form-control" placeholder="https://...">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Certification</button>
+            </form>
+        </div>
+    </div>
+    <p><a href="{% url 'certifications_list' %}">← Back to Certifications</a></p>
+</div>
+{% endblock %}

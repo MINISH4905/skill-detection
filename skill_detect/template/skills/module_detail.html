@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ module.title }} - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">{{ module.title }}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="module-detail">
+    <div class="card">
+        <div class="card-body">
+            <p class="module-meta">{{ module.domain_name }} · {{ module.get_difficulty_level_display }} · {{ module.xp_reward }} XP · {{ module.estimated_duration }} min</p>
+            <p>{{ module.description }}</p>
+            {% if module.content_url %}
+            <p><a href="{{ module.content_url }}" target="_blank" rel="noopener">Open content →</a></p>
+            {% endif %}
+            {% if not progress %}
+            <form action="{% url 'start_module' module.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Start Module</button>
+            </form>
+            {% else %}
+            <p><strong>Your progress:</strong> {{ progress.progress_percent }}% — {{ progress.get_status_display }}</p>
+            <form method="post" action="{% url 'update_module_progress' module.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Progress %</label>
+                    <input type="number" name="progress_percent" min="0" max="100" value="{{ progress.progress_percent }}" class="form-control" style="max-width:100px;">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status" class="form-control" style="max-width:200px;">
+                        <option value="not_started" {% if progress.status == 'not_started' %}selected{% endif %}>Not Started</option>
+                        <option value="in_progress" {% if progress.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                        <option value="completed" {% if progress.status == 'completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Progress</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    <p><a href="{% url 'modules_list' %}">← Back to Modules</a></p>
+</div>
+{% endblock %}

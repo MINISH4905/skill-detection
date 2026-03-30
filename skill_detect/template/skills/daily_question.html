@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Daily Question - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">Daily Question</h1>
+{% endblock %}
+
+{% block content %}
+<div class="question-page">
+    <div class="card question-card">
+        <div class="card-header">
+            <h2 class="card-title">Today's Question</h2>
+            {% if question.skill %}
+            <span class="question-skill-badge">{{ question.skill.name }}</span>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <div class="question-content">
+                <p class="question-text">{{ question.question_text }}</p>
+                {% if question.context %}
+                <div class="question-context">
+                    <small>Context: {{ question.context }}</small>
+                </div>
+                {% endif %}
+            </div>
+
+            <form method="post" class="response-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="response_text">Your Response</label>
+                    <textarea 
+                        id="response_text" 
+                        name="response_text" 
+                        rows="6" 
+                        class="form-control"
+                        placeholder="Share your thoughts on how you would approach this..."
+                        required
+                    ></textarea>
+                    <small class="form-help">Provide a thoughtful response based on your domain knowledge and daily routine.</small>
+                </div>
+                <div class="form-actions">
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit Response</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

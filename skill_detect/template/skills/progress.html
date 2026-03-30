@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Progress - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">Progress</h1>
+{% endblock %}
+
+{% block content %}
+<div class="progress-page">
+    <!-- Skill Progress Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Skill Progress</h2>
+        </div>
+        <div class="card-body">
+            {% for item in skill_progress %}
+            <div class="skill-progress-item">
+                <div class="skill-header">
+                    <span class="skill-name">{{ item.skill.name }}</span>
+                    <span class="skill-score">{{ item.current_score|floatformat:1 }}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ item.current_score }}%; background-color: #9B59B6;"></div>
+                </div>
+                <div class="skill-meta">
+                    Last updated: {{ item.date|date:"M d, Y" }}
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <p>No skill progress data yet. Start answering questions to track your skills!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Mastery Goals Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Mastery Goals</h2>
+        </div>
+        <div class="card-body">
+            {% for goal in mastery_goals %}
+            <div class="mastery-goal-item">
+                <div class="mastery-goal-header">
+                    <h3>{{ goal.skill.name }}</h3>
+                    <span class="mastery-status {% if goal.progress_percentage >= 100 %}completed{% endif %}">
+                        {{ goal.progress_percentage }}%
+                    </span>
+                </div>
+                <div class="mastery-goal-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ goal.progress_percentage }}%; background-color: #3498DB;"></div>
+                    </div>
+                    <div class="mastery-xp-info">
+                        <span>{{ goal.current_xp }} / {{ goal.target_xp }} XP</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <p>No mastery goals set yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

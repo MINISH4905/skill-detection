@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Skill Radar - Skill Decay Detection{% endblock %}
+
+{% block page_header %}
+<h1 class="page-title">Skill Radar</h1>
+{% endblock %}
+
+{% block content %}
+<div class="skill-radar-page">
+    {% if radar %}
+    <div class="card">
+        <div class="card-body">
+            <h3>Latest snapshot ({{ radar.snapshot_date }})</h3>
+            <div class="chart-container" style="height:300px;">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="card">
+        <div class="card-body">
+            <h3>Save new radar data</h3>
+            <p>Enter JSON object: skill names as keys, scores (0-100) as values.</p>
+            <form method="post" action="{% url 'save_radar' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="domain_name">Domain (optional)</label>
+                    <input type="text" name="domain_name" id="domain_name" class="form-control" placeholder="e.g. Python">
+                </div>
+                <div class="form-group">
+                    <label for="radar_data">Radar data (JSON)</label>
+                    <textarea name="radar_data" id="radar_data" class="form-control" rows="5" placeholder='{"Python": 85, "Django": 70, "FastAPI": 60}'>{{ radar_data_json }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Radar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% if radar and radar.radar_data %}
+<script>
+(function(){
+    const ctx = document.getElementById('radarChart');
+    if (!ctx) return;
+    const data = {{ radar_data_json|safe }};
+    const labels = Object.keys(data);
+    const values = Object.values(data);
+    if (labels.length) new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Skills',
+                data: values,
+                fill: true,
+                backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                borderColor: '#9B59B6',
+                pointBackgroundColor: '#9B59B6'
+            }]
+        },
+        options: {
+            scales: { r: { min: 0, max: 100 } }
+        }
+    });
+})();
+</script>
+{% endif %}
+{% endblock %}

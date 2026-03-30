@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block page_title %}Performance Intelligence{% endblock %}
+{% block content %}
+
+<div class="analytics-dashboard">
+
+    <!-- ================= SNAPSHOT ================= -->
+    <div class="snapshot-grid">
+
+        <div class="metric">
+            <div class="value">86.3</div>
+            <div class="label">Power Index</div>
+        </div>
+
+        <div class="metric">
+            <div class="value positive">+4.2%</div>
+            <div class="label">Weekly</div>
+        </div>
+
+        <div class="metric">
+            <div class="value positive">+9.8%</div>
+            <div class="label">Monthly</div>
+        </div>
+
+        <div class="metric">
+            <div class="value">4</div>
+            <div class="label">Domains</div>
+        </div>
+
+    </div>
+
+    <!-- ================= MAIN GRID ================= -->
+    <div class="main-grid">
+
+        <!-- Domain Radar -->
+        <div class="card">
+            <h5>Domain Capability</h5>
+            <canvas id="domainRadar"></canvas>
+        </div>
+
+        <!-- Growth Comparison -->
+        <div class="card">
+            <h5>Growth Trend</h5>
+            <canvas id="growthChart"></canvas>
+        </div>
+
+        <!-- Domain Table -->
+        <div class="card">
+            <h5>Domain Breakdown</h5>
+            <table class="domain-table">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Score</th>
+                        <th>W</th>
+                        <th>M</th>
+                    </tr>
+                </thead>
+                <tbody id="domainTableBody"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- ================= WEEKLY & MONTHLY DETAIL ================= -->
+    <div class="detail-grid">
+
+        <!-- Weekly Detail -->
+        <div class="card">
+            <h5>Weekly Progress (Daily)</h5>
+            <canvas id="weeklyDetailChart"></canvas>
+        </div>
+
+        <!-- Monthly Detail -->
+        <div class="card">
+            <h5>Monthly Progress (Weekly)</h5>
+            <canvas id="monthlyDetailChart"></canvas>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CSS ================= -->
+<style>
+
+.analytics-dashboard {
+    max-width: 1250px;
+    margin: 20px auto;
+    font-family: system-ui;
+}
+
+/* Snapshot */
+.snapshot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.metric {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.value {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.value.positive {
+    color: #27AE60;
+}
+
+.label {
+    font-size: 12px;
+    color: #777;
+}
+
+/* Main Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* Detail Grid */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.card canvas {
+    max-height: 220px;
+}
+
+/* Table */
+.domain-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.domain-table th,
+.domain-table td {
+    padding: 6px;
+    text-align: center;
+}
+
+.domain-table th {
+    font-weight: 500;
+    color: #777;
+}
+
+</style>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+/* ===== Dummy Domain Data ===== */
+
+const domains = ["AI", "Web", "Data Science", "DevOps"];
+
+const domainScores = {
+    "AI": { score: 88, weekly: +3, monthly: +8 },
+    "Web": { score: 82, weekly: +4, monthly: +10 },
+    "Data Science": { score: 91, weekly: +2, monthly: +6 },
+    "DevOps": { score: 75, weekly: +1, monthly: +5 }
+};
+
+/* ===== Domain Radar ===== */
+
+new Chart(document.getElementById("domainRadar"), {
+    type: "radar",
+    data: {
+        labels: domains,
+        datasets: [{
+            data: domains.map(d => domainScores[d].score),
+            borderColor: "#9B59B6",
+            backgroundColor: "rgba(155,89,182,0.15)",
+            pointBackgroundColor: "#9B59B6"
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+    }
+});
+
+
+/* ===== Growth Comparison Chart ===== */
+
+new Chart(document.getElementById("growthChart"), {
+    type: "line",
+    data: {
+        labels: ["W1","W2","W3","W4"],
+        datasets: [
+            {
+                label: "Weekly",
+                data: [72, 75, 80, 84],
+                borderColor: "#6C63FF",
+                fill: false,
+                tension: 0.3
+            },
+            {
+                label: "Monthly",
+                data: [60, 70, 78, 86],
+                borderColor: "#9B59B6",
+                fill: false,
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+
+/* ===== Weekly Detailed Chart ===== */
+
+new Chart(document.getElementById("weeklyDetailChart"), {
+    type: "bar",
+    data: {
+        labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+        datasets: [{
+            data: [5, 8, 6, 10, 12, 7, 9],
+            backgroundColor: "#6C63FF"
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+    }
+});
+
+
+/* ===== Monthly Detailed Chart ===== */
+
+new Chart(document.getElementById("monthlyDetailChart"), {
+    type: "line",
+    data: {
+        labels: ["Week 1","Week 2","Week 3","Week 4"],
+        datasets: [{
+            data: [60, 70, 78, 86],
+            borderColor: "#9B59B6",
+            backgroundColor: "rgba(155,89,182,0.2)",
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+    }
+});
+
+
+/* ===== Populate Table ===== */
+
+const tableBody = document.getElementById("domainTableBody");
+
+domains.forEach(domain => {
+    const data = domainScores[domain];
+
+    tableBody.innerHTML += `
+        <tr>
+            <td>${domain}</td>
+            <td>${data.score}</td>
+            <td>+${data.weekly}</td>
+            <td>+${data.monthly}</td>
+        </tr>
+    `;
+});
+
+</script>
+
+{% endblock %}

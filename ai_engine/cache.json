@@ -1,0 +1,17 @@
+{
+  "Artificial Intelligence and Machine Learning": {
+    "topics": [
+      "ExplainableAI",
+      "EdgeAI",
+      "TransferLearning",
+      "ContrastiveLearning",
+      "ReinforcementLearning",
+      "GenerativeAdversarial",
+      "TimeSeriesForecasting",
+      "Autoencoders",
+      "NaturalLanguageProcessing",
+      "MultiModalEmbedding"
+    ],
+    "last_updated": "2026-02-23"
+  }
+}
